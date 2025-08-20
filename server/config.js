@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 export default class Server {
     constructor() {
         this.app = express()
-        this.port = 3000;
+        this.port = process.env.PORT || 3000;
         this.middlewares()
     }
 
