@@ -1,10 +1,5 @@
 import Usuario from "../models/usuario.js";
 
-export const test = (req, res) => {
-  res.status(200)
-  res.send('Primera prueba con Usuarios')
-};
-
 export const leerUsuarios = async (req, res) => {
   try {
     const listaUsuarios = await Usuario.find()
