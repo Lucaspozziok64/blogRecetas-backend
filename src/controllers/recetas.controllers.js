@@ -1,3 +1,4 @@
+import { json } from "express";
 import Receta from "../models/recetas.js";
 
 export const leerRecetas = async (req, res) => {
@@ -35,5 +36,19 @@ export const leerRecetaPorId = async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ mensaje: 'Error al leer la receta' })
+  }
+}
+
+export const borrarRecetaPorId = async (req, res) => {
+  try {
+    const recetaEliminada = await Receta.findByIdAndDelete(req.params.id, req.body)
+
+    if(!recetaEliminada) {
+      return res.status(404).json({ mensaje: 'Receta no encontrada' })
+    }
+    res.status(200).json({ mensaje: 'Receta eliminada exitosamente' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ mensaje: 'Error al eliminar la receta' })
   }
 }
