@@ -17,18 +17,31 @@ const validacionRecetas = [
         return true;
       throw new Error("Ya existe una receta con ese nombre");
     }),
-  body("primerPaso")
+  body("imagen")
     .notEmpty()
-    .withMessage("El primer paso de la receta es obligatorio")
-    .isLength({ min: 8, max: 30 })
+    .withMessage("La imagen es un dato obligatorio")
+    .matches(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|webp)/)
     .withMessage(
-      "El primer paso de la receta debe tener entre 8 y 30 caracteres"
+      "La imagen debe ser una URL valida y debe terminar en .jpg, .jpeg, .png o .wep"
     ),
-  body("segundoPaso")
-    .optional()
-    .isLength({ min: 8, max: 30 })
+  body("categoria")
+    .notEmpty()
+    .withMessage("La categoria es un dato obligatorio")
+    .isIn(["Dulce", "Comida", "Pasteles", "Salado"])
     .withMessage(
-      "El segundo paso de la receta debe tener entre 8 y 30 caracteres"
+      "La categoria debe ser una de las siguientes opciones: Dulce, Comida, Pasteles, Salado"
+    ),
+  body("descripcion")
+    .notEmpty()
+    .withMessage("La descripcion es obligatoria")
+    .isLength({ min: 10, max: 300 })
+    .withMessage("La descripcion debe tener entre 10 y 300 caracteres"),
+  body("pasos")
+    .notEmpty()
+    .withMessage("Los pasos de la receta es obligatorio")
+    .isLength({ min: 15, max: 500 })
+    .withMessage(
+      "Los pasos de la receta debe tener entre 15 y 500 caracteres"
     ),
   (req, res, next) => resultadoValidacion(req, res, next),
 ];

@@ -10,17 +10,33 @@ const recetaSchema = new Schema(
       maxLenght: 100,
       trim: true,
     },
-    primerPaso: {
+    imagen: {
       type: String,
       required: true,
-      minLenght: 8,
-      maxLenght: 30,
-      trim: true,
+      validate: {
+        validator: (valor) => {
+          return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?(\.(jpg|jpeg|png|webp))$/.test(
+            valor
+          );
+        },
+      },
     },
-    segundoPaso: {
+    categoria: {
       type: String,
-      minLenght: 8,
-      maxLenght: 30,
+      required: true,
+      enum: ["Dulce", "Comida", "Pasteles", "Salado"],
+    },
+    descripcion: {
+      type: String,
+      required: true,
+      minLenght: 10,
+      maxLenght: 300,
+    },
+    pasos: {
+      type: String,
+      required: true,
+      minLenght: 10,
+      maxLenght: 500,
       trim: true,
     },
   },
