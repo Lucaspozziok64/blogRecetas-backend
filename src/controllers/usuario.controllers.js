@@ -1,3 +1,4 @@
+import generarJWT from "../helpers/generarJWT.js";
 import Usuario from "../models/usuario.js";
 import bcrypt from "bcrypt";
 
@@ -35,19 +36,20 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const usuarioExistente = await Usuario.findOne({ email });
     if(!usuarioExistente) {
-      return res.status(400).json({ mensaje: 'No se encontro el usuario' });
+      return res.status(404).json({ mensaje: 'No se encontro el usuario' });
     }
 
     // Tambien debo verificar el password con bcrypt, si no es la misma msj error
     const passwordVerificado = bcrypt.compareSync(password, usuarioExistente.password);
     if(!passwordVerificado) {
-      return res.status(400).json({ mensaje: 'Credenciales incorrectas' });
+      return res.status(401).json({ mensaje: 'Credenciales incorrectas' });
     }
 
     //Aqui debo generar token 
+    const token = await generarJWT(usuarioExistente.nombreUsuario, usuarioExistente.email)
 
     // Aqui debo enviar una respuesta al front si es login es exitoso
-    res.status(200).json({ mensaje: 'Login exitoso', nombreUsuario: usuarioExistente.nombreUsuario })
+    res.status(200).json({ mensaje: 'Login exitoso', nombreUsuario: usuarioExistente.nombreUsuario, token })
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al loguear usuario' })
