@@ -15,6 +15,13 @@ export const leerUsuarios = async (req, res) => {
 export const crearUsuario = async (req, res) => {
   try {
     const {nombreUsuario, email, password} = req.body; 
+
+    //Verificar si el email ya existe 
+    const usuarioExistente = await Usuario.findOne({ email });
+    if (usuarioExistente) {
+      return res.status(409).json({ mensaje: "El email ya está registrado." });
+    }
+
     //Hashear el password
     const saltos = bcrypt.genSaltSync(10);
     console.log(saltos)
